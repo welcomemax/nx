@@ -114,7 +114,7 @@ jobs:
           command: pnpm nx show projects
       - run:
           name: Diff workspace cache files
-          command: diff -r .nx/workspace-data .nx/temp-workspace-data
+          command: diff .nx/workspace-data/project-graph.json .nx/temp-workspace-data/project-graph.json
       - run:
           name: Print Workspace Cache 2
           command: ls -lah .nx/workspace-data
