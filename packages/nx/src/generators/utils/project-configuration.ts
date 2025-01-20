@@ -254,8 +254,15 @@ function readAndCombineAllProjectConfigurations(tree: Tree): {
   const patterns = [
     '**/project.json',
     'project.json',
-    ...getGlobPatternsFromPackageManagerWorkspaces(tree.root, (p) =>
-      readJson(tree, p, { expectComments: true })
+    ...getGlobPatternsFromPackageManagerWorkspaces(
+      tree.root,
+      (p) => readJson(tree, p, { expectComments: true }),
+      <T extends Object>(p) => {
+        const content = tree.read(p, 'utf-8');
+        const { load } = require('@zkochan/js-yaml');
+        return load(content, { filename: p }) as T;
+      },
+      (p) => tree.exists(p)
     ),
   ];
   const globbedFiles = globWithWorkspaceContextSync(tree.root, patterns);
